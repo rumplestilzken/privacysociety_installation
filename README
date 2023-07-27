@@ -1,2 +1,6 @@
+Run "python setup.py" to install system dependencies. This only needs to be done once per flashing environment.
+
 Read the README for the device you intend on flashing for instructions on how to process the device manually to prepare
 for flashing.
+
+

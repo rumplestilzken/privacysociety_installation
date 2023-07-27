@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import os
 from enum import Enum
 import subprocess
 
@@ -10,9 +11,15 @@ class DeviceType(Enum):
     Jelly2E = "jelly2e"
     AtomL = "atoml"
 
+class DeviceRegion(Enum):
+    NotSet = ""
+    TEE = "tee"
+    EEA = "eea"
+
 
 def main():
     dev = DeviceType.NotSet
+    region = DeviceRegion.NotSet
 
     answer = input("Which device would you like to flash?\n1)Titan Pocket\n2)Jelly 2E\n3)Atom L\nSelection:")
     match answer:
@@ -26,10 +33,18 @@ def main():
             print("Invalid Selection.")
             quit()
 
-    print("Device Type: '" + dev.name + "'")
+    answer = input("Which region is your device?\n1)TEE\n2)EEA\nSelection:")
+    match answer:
+        case "1":
+            region = DeviceRegion.TEE
+        case "2":
+            region = DeviceRegion.EEA
+        case _:
+            print("Invalid Selection.")
+            quit()
+
+    print("Device Type: '" + dev.name + "' Region: '" + region.name  + "'")
     answer = input("Have you read and understood the flashing instructions for this device? Press enter.")
-    answer = input("Have you manually processed this device as the instructions indicate must be done prior to flashing"
-                   "? Press enter.")
     answer = input("Connect the device to the computer. Press Enter.")
 
     script = ""
@@ -44,7 +59,9 @@ def main():
         case _:
             print("Device type '" + dev.name + "' not supported.")
 
-    subprocess.run(["python", script])
+    subprocess.run(["python", script, " -region " + region.name ])
+
+    print("Flashing Complete.")
 
     return
 
