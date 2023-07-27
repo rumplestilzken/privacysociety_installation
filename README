@@ -1,11 +1,2 @@
-Power phone on.
-Go through setup process, skip everything.
-Open settings.
-Open About.
-Tap 7 times on Build number.
-Go back one menu, tap system.
-Tap Advanced.
-Tap Developer Options.
-Enable USB Debugging.
-Enable OEM Unlocking.
-Execute "python install.py" and follow directions there.
+Read the README for the device you intend on flashing for instructions on how to process the device manually to prepare
+for flashing.

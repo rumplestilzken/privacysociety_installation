@@ -1,0 +1,11 @@
+Power phone on.
+Go through setup process, skip everything,  there is nothing important here.
+Open Settings.
+Open About.
+Tap 7 times on Build number.
+Go back one menu, tap System.
+Tap Advanced.
+Tap Developer Options.
+Enable USB Debugging.
+Enable OEM Unlocking.
+Execute "python install.py" and follow directions there.
