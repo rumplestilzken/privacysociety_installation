@@ -43,7 +43,7 @@ def main():
             print("Invalid Selection.")
             quit()
 
-    print("Device Type: '" + dev.name + "' Region: '" + region.name  + "'")
+    print("Device Type: '" + dev.name + "' Region: '" + region.name + "'")
     answer = input("Have you read and understood the flashing instructions for this device? Press enter.")
     answer = input("Connect the device to the computer. Press Enter.")
 
@@ -59,7 +59,7 @@ def main():
         case _:
             print("Device type '" + dev.name + "' not supported.")
 
-    subprocess.run(["python", script, " -region " + region.name ])
+    subprocess.check_call(['python', script, '-region', region.value])
 
     print("Flashing Complete.")
 

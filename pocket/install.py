@@ -49,47 +49,73 @@ def download_resources():
 
     if not os.path.exists(here + "/" + filename):
         print("Downloading Stock Rom")
-        os.system("cd pocket; wget https://github.com/rumplestilzken/privacysociety_installation/releases/download"
+        os.system("wget https://github.com/rumplestilzken/privacysociety_installation/releases/download"
                   "/rom_resources/" + filename)
 
     if not os.path.exists(here + "/" + filename.strip(".tar.xz")):
         print("Extracting Stock Rom")
-        os.system("cd pocket; xz -kd " + filename)
-        os.system("cd pocket; tar -xf " + filename.strip(".xz"))
-        os.system("cd pocket; rm " + filename.strip(".xz"))
+        os.system("xz -kd " + filename)
+        os.system("tar -xf " + filename.strip(".xz"))
+        os.system("rm " + filename.strip(".xz"))
 
     img_filename = "privacysociety_pocket.img.xz"
     if not os.path.exists(here + "/" + img_filename):
         print("Downloading PrivacySociety GSI")
-        os.system("cd pocket; wget https://github.com/rumplestilzken/privacysociety_installation/releases/download"
+        os.system("wget https://github.com/rumplestilzken/privacysociety_installation/releases/download"
                   "/rom_resources/" + img_filename)
         print("Extracting PrivacySociety GSI")
-        os.system("cd pocket; xz -kd " + img_filename)
+        os.system("xz -kd " + img_filename)
 
 
 def flash_stock():
     print("Flashing Stock Rom")
     global filename
-    answer = input("Keep device connected. Press enter and reboot the device.")
-    command = "cd pocket/" + filename.strip(".tar.xz") + "; mtk w preloader, recovery, vbmeta, vbmeta_system, " \
-                                                         "vbmeta_vendor, md1img, spmfw, scp1, scp2, sspm_1, sspm_2, " \
-                                                         "cam_vpu1, cam_vpu2, cam_vpu3, gz1, gz2, lk, lk2, boot, logo, " \
-                                                         "dtbo, tee1, tee2, super, cache, userdata "
+    answer = input("Keep device connected. Press enter and reboot or power on the device.")
 
-    command += "preloader_g66v71c2k_dfl_tee.bin, recovery.img, vbmeta.img, vbmeta_system.img, vbmeta_vendor.img, " \
-               "md1img-verified.img, spmfw-verified.img, scp-verified.img, scp-verified.img, sspm-verified.img, " \
-               "sspm-verified.img, cam_vpu1-verified.img, cam_vpu2-verified.img, cam_vpu3-verified.img, " \
-               "gz-verified.img, gz-verified.img, lk-verified.img, lk-verified.img, boot.img, logo-verifiee.bin, " \
-               "dtbo-verified.img, tee-verified.img, tee-verified.img, super.img, cache.img, userdata.img"
+    command = "cd " + filename.strip(".tar.xz") + "; mtk w recovery recovery.img"
+    command += "; mtk w vbmeta vbmeta.img"
+    command += "; mtk w vbmeta_system vbmeta_system.img"
+    command += "; mtk w vbmeta_vendor vbmeta_vendor.img"
+    command += "; mtk w md1img md1img-verified.img"
+    command += "; mtk w spmfw spmfw-verified.img"
+    command += "; mtk w scp1 scp-verified.img"
+    command += "; mtk w scp2 scp-verified.img"
+    command += "; mtk w sspm_1 sspm-verified.img"
+    command += "; mtk w sspm_2 sspm-verified.img"
+    command += "; mtk w cam_vpu1 cam_vpu1-verified.img"
+    command += "; mtk w cam_vpu2 cam_vpu2-verified.img"
+    command += "; mtk w cam_vpu3 cam_vpu3-verified.img"
+    command += "; mtk w gz1 gz-verified.img"
+    command += "; mtk w gz2 gz-verified.img"
+    command += "; mtk w lk lk-verified.img"
+    command += "; mtk w lk2 lk-verified.img"
+    command += "; mtk w boot boot.img"
+    command += "; mtk w logo logo-verified.bin"
+    command += "; mtk w dtbo dtbo-verified.img"
+    command += "; mtk w tee1 tee-verified.img"
+    command += "; mtk w tee2 tee-verified.img"
+    command += "; mtk w super super.img"
+    command += "; mtk w cache cache.img"
+    command += "; mtk w userdata userdata.img"
+    command += "; mtk e metadata"
 
     os.system(command)
+
 
 def mksuper():
     here = os.path.dirname(os.path.realpath(__file__))
     print("mksuper process running")
 
     if not os.path.exists(here + "/super.ext4.img"):
-        subprocess.run(["python", here + "/../downloads/mksuper.py", " -dev pocket -gsi " + here + "/privacysociety_pocket.img -out " + here + "/super.ext4.img"])
+        if not os.path.exists(here + "/../downloads/mksuper/simg2img/simg2img"):
+            os.system("cd " + here + "/../downloads/mksuper/; python install-dependencies.py")
+        if not os.path.exists(here + "/super"):
+            os.system("cd " + here + "/../downloads/mksuper/; python extract.py -stock " + here + "/" \
+                      + filename.strip(".tar.xz") + " -out " + here + "/super")
+
+        # subprocess.check_call(["python", here + "/../downloads/mksuper/mksuper.py",
+        #                        "-dev pocket", "-gsi " + here + "/privacysociety_pocket.img",
+        #                        "-out " + here + "/super.ext4.img"])
 
 
 def flash_lineage():
@@ -101,10 +127,10 @@ def flash_lineage():
     os.system("adb reboot bootloader")
     answer = input("Press Volume Up on the device when prompted...Press enter to continue")
     os.system("fastboot flashing unlock")
-    os.system("fastboot flash boot " + here + "/" + filename + "/boot.img")
-    os.system("fastboot flash --disable-verity --disable-verification vbmeta " + here + "/" + filename + "/vbmeta.img")
-    os.system("fastboot flash --disable-verity --disable-verification vbmeta_vendor " + here + "/" + filename + "/vbmeta_vendor.img")
-    os.system("fastboot flash --disable-verity --disable-verification vbmeta_system " + here + "/" + filename + "/vbmeta_system.img")
+    os.system("fastboot flash boot " + filename + "/boot.img")
+    os.system("fastboot flash --disable-verity --disable-verification vbmeta " + filename + "/vbmeta.img")
+    os.system("fastboot flash --disable-verity --disable-verification vbmeta_vendor " + filename + "/vbmeta_vendor.img")
+    os.system("fastboot flash --disable-verity --disable-verification vbmeta_system " + filename + "/vbmeta_system.img")
     os.system("fastboot flash super " + here + "/super.ext4.img")
     print("The device will now reboot into PrivacySociety GSI")
     os.system("fastboot reboot")

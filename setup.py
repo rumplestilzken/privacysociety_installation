@@ -7,6 +7,8 @@ def download_mtkclient():
     print("Downloading mtkclient")
     if not os.path.exists("downloads/mtkclient"):
         os.system("cd downloads; git clone https://github.com/rumplestilzken/mtkclient.git")
+    else:
+        os.system("cd downloads/mtkclient; git pull;")
 
 
 def install_mtkclient():
@@ -20,6 +22,8 @@ def download_mksuper():
     print("Downloading mksuper")
     if not os.path.exists("downloads/mksuper"):
         os.system("cd downloads; git clone https://github.com/rumplestilzken/mksuper.git")
+    else:
+        os.system("cd downloads/mksuper; git pull;")
 
 
 def main():
