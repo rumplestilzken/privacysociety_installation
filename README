@@ -3,4 +3,5 @@ Run "python setup.py" to install system dependencies. This only needs to be done
 Read the README for the device you intend on flashing for instructions on how to process the device manually to prepare
 for flashing.
 
+This process will only work on a Linux machine. Tested with Linux Mint 21.1.
 

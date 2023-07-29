@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 
 import os
-import subprocess
 from enum import Enum
 from argparse import ArgumentParser, RawDescriptionHelpFormatter, Action
 
 region = ""
 filename = ""
+magisk_filename = ""
 
 
 class DeviceRegion(Enum):
@@ -66,13 +66,25 @@ def download_resources():
         print("Extracting PrivacySociety GSI")
         os.system("xz -kd " + img_filename)
 
+    global magisk_filename
+    magisk_filename = ""
+    if region == DeviceRegion.TEE:
+        magisk_filename = "magisk_patched-25200_H63Lj.img"
+    else:
+        magisk_filename = "magisk_patched-25200_h3ilq.img"
+
+    if not os.path.exists(here + "/../downloads/" + magisk_filename):
+        print("Downloading Magisk Boot Image")
+        os.system("cd downloads/; wget https://github.com/rumplestilzken/privacysociety_installation/releases/download"
+                  "/rom_resources/" + magisk_filename)
+
 
 def flash_stock():
     print("Flashing Stock Rom")
     global filename
     answer = input("Keep device connected. Press enter and reboot or power on the device.")
 
-    command = "cd " + filename.strip(".tar.xz") + "; mtk w recovery recovery.img"
+    command = "cd pocket; cd " + filename.strip(".tar.xz") + "; mtk w recovery recovery.img"
     command += "; mtk w vbmeta vbmeta.img"
     command += "; mtk w vbmeta_system vbmeta_system.img"
     command += "; mtk w vbmeta_vendor vbmeta_vendor.img"
@@ -97,7 +109,7 @@ def flash_stock():
     command += "; mtk w super super.img"
     command += "; mtk w cache cache.img"
     command += "; mtk w userdata userdata.img"
-    command += "; mtk e metadata"
+    command += "; mtk e metadata,userdata,md_udc"
 
     os.system(command)
 
@@ -106,16 +118,15 @@ def mksuper():
     here = os.path.dirname(os.path.realpath(__file__))
     print("mksuper process running")
 
-    if not os.path.exists(here + "/super.ext4.img"):
+    if not os.path.exists(here + "/super." + filename.strip(".tar.xz") + ".ext4.img"):
         if not os.path.exists(here + "/../downloads/mksuper/simg2img/simg2img"):
             os.system("cd " + here + "/../downloads/mksuper/; python install-dependencies.py")
-        if not os.path.exists(here + "/super"):
+        if not os.path.exists(here + "/super_" + filename.strip(".tar.xz")):
             os.system("cd " + here + "/../downloads/mksuper/; python extract.py -stock " + here + "/" \
-                      + filename.strip(".tar.xz") + " -out " + here + "/super")
-
-        # subprocess.check_call(["python", here + "/../downloads/mksuper/mksuper.py",
-        #                        "-dev pocket", "-gsi " + here + "/privacysociety_pocket.img",
-        #                        "-out " + here + "/super.ext4.img"])
+                      + filename.strip(".tar.xz") + " -out " + here + "/super_" + filename.strip(".tar.xz"))
+        os.system("cd " + here + "/../downloads/mksuper/; python mksuper.py -dev pocket -gsi " + here \
+                  + "/privacysociety_pocket.img" + " -out " + here + "/super." + filename.strip(
+            ".tar.xz") + ".ext4.img -super_path " + here + "/super_" + filename.strip(".tar.xz"))
 
 
 def flash_lineage():
@@ -127,13 +138,33 @@ def flash_lineage():
     os.system("adb reboot bootloader")
     answer = input("Press Volume Up on the device when prompted...Press enter to continue")
     os.system("fastboot flashing unlock")
-    os.system("fastboot flash boot " + filename + "/boot.img")
-    os.system("fastboot flash --disable-verity --disable-verification vbmeta " + filename + "/vbmeta.img")
-    os.system("fastboot flash --disable-verity --disable-verification vbmeta_vendor " + filename + "/vbmeta_vendor.img")
-    os.system("fastboot flash --disable-verity --disable-verification vbmeta_system " + filename + "/vbmeta_system.img")
-    os.system("fastboot flash super " + here + "/super.ext4.img")
-    print("The device will now reboot into PrivacySociety GSI")
+    os.system("fastboot flash boot " + here + "/../downloads/" + magisk_filename)
+    os.system("fastboot flash --disable-verity --disable-verification vbmeta " + here + "/" + filename.strip(
+        ".tar.xz") + "/vbmeta.img")
+    os.system("fastboot flash --disable-verity --disable-verification vbmeta_vendor " + here + "/" + filename.strip(
+        ".tar.xz") + "/vbmeta_vendor.img")
+    os.system("fastboot flash --disable-verity --disable-verification vbmeta_system " + here + "/" + filename.strip(
+        ".tar.xz") + "/vbmeta_system.img")
+    os.system("fastboot flash super " + here + "/super." + filename.strip(".tar.xz") + ".ext4.img")
     os.system("fastboot reboot")
+    print("The device will now reboot into PrivacySociety GSI")
+
+
+def install_magisk():
+    answer = input("Once the phone has booted into PrivacySociety GSI, press Enter.")
+    here = os.path.dirname(os.path.realpath(__file__))
+    print("Installing Magisk")
+    if not os.path.exists("downloads/Magisk-v25.2.apk"):
+        os.system("cd downloads/; wget https://github.com/rumplestilzken/privacysociety_installation/releases"
+                  "/download/rom_resources/Magisk-v25.2.apk")
+
+    os.system("adb install " + here + "/../downloads/Magisk-v25.2.apk")
+
+
+def apply_kika():
+    os.system("adb shell pm enable com.iqqijni.bbkeyboard; adb shell ime enable "
+              "com.iqqijni.bbkeyboard/.keyboard_service.view.HDKeyboardService; adb shell ime set "
+              "com.iqqijni.bbkeyboard/.keyboard_service.view.HDKeyboardService;")
 
 
 def usage():
@@ -155,8 +186,10 @@ def main():
 
     download_resources()
     mksuper()
-    # flash_stock()
+    flash_stock()
     # flash_lineage()
+    # install_magisk()
+    # apply_kika()
 
     return
 

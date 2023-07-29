@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 
-import os
 from enum import Enum
 import subprocess
 
@@ -10,6 +9,7 @@ class DeviceType(Enum):
     Pocket = "pocket"
     Jelly2E = "jelly2e"
     AtomL = "atoml"
+
 
 class DeviceRegion(Enum):
     NotSet = ""
