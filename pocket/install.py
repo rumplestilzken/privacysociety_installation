@@ -7,6 +7,7 @@ from argparse import ArgumentParser, RawDescriptionHelpFormatter, Action
 region = ""
 filename = ""
 magisk_filename = ""
+sp_flash_tool_filename = ""
 
 
 class DeviceRegion(Enum):
@@ -78,39 +79,23 @@ def download_resources():
         os.system("cd downloads/; wget https://github.com/rumplestilzken/privacysociety_installation/releases/download"
                   "/rom_resources/" + magisk_filename)
 
+    global sp_flash_tool_filename
+    sp_flash_tool_filename = "SP_Flash_Tool_v5.2152_Linux.zip"
+    if not os.path.exists(here + "/../downloads/" + sp_flash_tool_filename):
+        print("Downloading Magisk Boot Image")
+        os.system("cd downloads/; wget https://github.com/rumplestilzken/privacysociety_installation/releases/download"
+                  "/rom_resources/" + sp_flash_tool_filename)
+        os.system("cd downloads; unzip " + sp_flash_tool_filename)
+
 
 def flash_stock():
+    here = os.path.dirname(os.path.realpath(__file__))
     print("Flashing Stock Rom")
     global filename
     answer = input("Keep device connected. Press enter and reboot or power on the device.")
-
-    command = "cd pocket; cd " + filename.strip(".tar.xz") + "; mtk w recovery recovery.img"
-    command += "; mtk w vbmeta vbmeta.img"
-    command += "; mtk w vbmeta_system vbmeta_system.img"
-    command += "; mtk w vbmeta_vendor vbmeta_vendor.img"
-    command += "; mtk w md1img md1img-verified.img"
-    command += "; mtk w spmfw spmfw-verified.img"
-    command += "; mtk w scp1 scp-verified.img"
-    command += "; mtk w scp2 scp-verified.img"
-    command += "; mtk w sspm_1 sspm-verified.img"
-    command += "; mtk w sspm_2 sspm-verified.img"
-    command += "; mtk w cam_vpu1 cam_vpu1-verified.img"
-    command += "; mtk w cam_vpu2 cam_vpu2-verified.img"
-    command += "; mtk w cam_vpu3 cam_vpu3-verified.img"
-    command += "; mtk w gz1 gz-verified.img"
-    command += "; mtk w gz2 gz-verified.img"
-    command += "; mtk w lk lk-verified.img"
-    command += "; mtk w lk2 lk-verified.img"
-    command += "; mtk w boot boot.img"
-    command += "; mtk w logo logo-verified.bin"
-    command += "; mtk w dtbo dtbo-verified.img"
-    command += "; mtk w tee1 tee-verified.img"
-    command += "; mtk w tee2 tee-verified.img"
-    command += "; mtk w super super.img"
-    command += "; mtk w cache cache.img"
-    command += "; mtk w userdata userdata.img"
-    command += "; mtk e metadata,userdata,md_udc"
-
+    os.system("cd downloads/" + sp_flash_tool_filename.strip(".zip") + "; chmod +x flash_tool")
+    command = "cd downloads/" + sp_flash_tool_filename.strip(".zip") + "; ./flash_tool -d MTK_AllInOne_DA.bin -s " + here + "/" + filename.strip(".tar.xz") + "/MT6771_Android_scatter.txt -c download"
+    print(command)
     os.system(command)
 
 
@@ -133,8 +118,7 @@ def flash_lineage():
     print("Preparing to flash PrivacySociety GSI")
     here = os.path.dirname(os.path.realpath(__file__))
 
-    answer = input("Disconnect the device from the computer. Plug back in and manually process according to README. "
-                   "Press Enter to continue.")
+    answer = input("Let device power on and manually process according to README. Press Enter to continue.")
     os.system("adb reboot bootloader")
     answer = input("Press Volume Up on the device when prompted...Press enter to continue")
     os.system("fastboot flashing unlock")
@@ -187,9 +171,9 @@ def main():
     download_resources()
     mksuper()
     flash_stock()
-    # flash_lineage()
-    # install_magisk()
-    # apply_kika()
+    flash_lineage()
+    install_magisk()
+    apply_kika()
 
     return
 
