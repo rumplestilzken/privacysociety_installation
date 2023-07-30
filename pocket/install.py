@@ -87,6 +87,9 @@ def download_resources():
                   "/rom_resources/" + sp_flash_tool_filename)
         os.system("cd downloads; unzip " + sp_flash_tool_filename)
 
+    if not os.path.exists("downloads/Magisk-v25.2.apk"):
+        os.system("cd downloads/; wget https://github.com/rumplestilzken/privacysociety_installation/releases"
+                  "/download/rom_resources/Magisk-v25.2.apk")
 
 def flash_stock():
     here = os.path.dirname(os.path.realpath(__file__))
@@ -138,9 +141,6 @@ def install_magisk():
     answer = input("Once the phone has booted into PrivacySociety GSI, press Enter.")
     here = os.path.dirname(os.path.realpath(__file__))
     print("Installing Magisk")
-    if not os.path.exists("downloads/Magisk-v25.2.apk"):
-        os.system("cd downloads/; wget https://github.com/rumplestilzken/privacysociety_installation/releases"
-                  "/download/rom_resources/Magisk-v25.2.apk")
 
     os.system("adb install " + here + "/../downloads/Magisk-v25.2.apk")
 
