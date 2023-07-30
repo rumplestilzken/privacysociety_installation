@@ -29,7 +29,7 @@ def download_mksuper():
 def main():
     print("Installing dependencies...")
 
-    os.system("sudo apt install git wget python3 libusb-1.0-0 python3-pip adb fastboot")
+    os.system("sudo apt install git wget python3 python-is-python3 libusb-1.0-0 python3-pip adb fastboot")
 
     os.system("mkdir -p downloads")
     download_mtkclient()

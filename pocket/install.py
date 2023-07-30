@@ -50,19 +50,20 @@ def download_resources():
 
     if not os.path.exists(here + "/" + filename):
         print("Downloading Stock Rom")
-        os.system("wget https://github.com/rumplestilzken/privacysociety_installation/releases/download"
+        os.system("cd " + here + "; wget https://github.com/rumplestilzken/privacysociety_installation/releases/download"
                   "/rom_resources/" + filename)
 
     if not os.path.exists(here + "/" + filename.strip(".tar.xz")):
         print("Extracting Stock Rom")
-        os.system("xz -kd " + filename)
-        os.system("tar -xf " + filename.strip(".xz"))
-        os.system("rm " + filename.strip(".xz"))
+        os.system("cd " + here + "; xz -kd " + filename)
+        os.system("cd " + here + "; tar -xf " + filename.strip(".xz"))
+        os.system("cd " + here + "; rm " + filename.strip(".xz"))
+
 
     img_filename = "privacysociety_pocket.img.xz"
     if not os.path.exists(here + "/" + img_filename):
         print("Downloading PrivacySociety GSI")
-        os.system("wget https://github.com/rumplestilzken/privacysociety_installation/releases/download"
+        os.system("cd " + here + "; wget https://github.com/rumplestilzken/privacysociety_installation/releases/download"
                   "/rom_resources/" + img_filename)
         print("Extracting PrivacySociety GSI")
         os.system("xz -kd " + img_filename)
@@ -74,9 +75,9 @@ def download_resources():
     else:
         magisk_filename = "magisk_patched-25200_h3ilq.img"
 
-    if not os.path.exists(here + "/../downloads/" + magisk_filename):
+    if not os.path.exists(here + "/" + magisk_filename):
         print("Downloading Magisk Boot Image")
-        os.system("cd downloads/; wget https://github.com/rumplestilzken/privacysociety_installation/releases/download"
+        os.system("cd " + here + "; wget https://github.com/rumplestilzken/privacysociety_installation/releases/download"
                   "/rom_resources/" + magisk_filename)
 
     global sp_flash_tool_filename
@@ -91,13 +92,22 @@ def download_resources():
         os.system("cd downloads/; wget https://github.com/rumplestilzken/privacysociety_installation/releases"
                   "/download/rom_resources/Magisk-v25.2.apk")
 
+    lk_filename = "lk." + filename.strip(".tar.xz")
+
+    if not os.path.exists(here + "/" + lk_filename):
+        print("Downloading lk Image")
+        os.system("cd " + here + "; wget https://github.com/rumplestilzken/privacysociety_installation/releases/download"
+                  "/rom_resources/" + lk_filename)
+
 def flash_stock():
     here = os.path.dirname(os.path.realpath(__file__))
     print("Flashing Stock Rom")
     global filename
     answer = input("Keep device connected. Press enter and reboot or power on the device.")
     os.system("cd downloads/" + sp_flash_tool_filename.strip(".zip") + "; chmod +x flash_tool")
-    command = "cd downloads/" + sp_flash_tool_filename.strip(".zip") + "; ./flash_tool -d MTK_AllInOne_DA.bin -s " + here + "/" + filename.strip(".tar.xz") + "/MT6771_Android_scatter.txt -c download"
+    command = "cd downloads/" + sp_flash_tool_filename.strip(
+        ".zip") + "; ./flash_tool -d MTK_AllInOne_DA.bin -s " + here + "/" + filename.strip(
+        ".tar.xz") + "/MT6771_Android_scatter.txt -c firmware-upgrade"
     print(command)
     os.system(command)
 
@@ -125,20 +135,22 @@ def flash_lineage():
     os.system("adb reboot bootloader")
     answer = input("Press Volume Up on the device when prompted...Press enter to continue")
     os.system("fastboot flashing unlock")
-    os.system("fastboot flash boot " + here + "/../downloads/" + magisk_filename)
+    os.system("fastboot flash boot " + here + "/" + magisk_filename)
     os.system("fastboot flash --disable-verity --disable-verification vbmeta " + here + "/" + filename.strip(
         ".tar.xz") + "/vbmeta.img")
     os.system("fastboot flash --disable-verity --disable-verification vbmeta_vendor " + here + "/" + filename.strip(
         ".tar.xz") + "/vbmeta_vendor.img")
     os.system("fastboot flash --disable-verity --disable-verification vbmeta_system " + here + "/" + filename.strip(
         ".tar.xz") + "/vbmeta_system.img")
+    os.system("fastboot flash lk " + here + "/lk." + filename.strip(".tar.xz") + ".img")
+    os.system("fastboot flash lk2 " + here + "/lk." + filename.strip(".tar.xz") + ".img")
     os.system("fastboot flash super " + here + "/super." + filename.strip(".tar.xz") + ".ext4.img")
     os.system("fastboot reboot")
     print("The device will now reboot into PrivacySociety GSI")
 
 
 def install_magisk():
-    answer = input("Once the phone has booted into PrivacySociety GSI, press Enter.")
+    answer = input("Once the phone has booted  into PrivacySociety GSI and been set up, press Enter.")
     here = os.path.dirname(os.path.realpath(__file__))
     print("Installing Magisk")
 
@@ -149,6 +161,11 @@ def apply_kika():
     os.system("adb shell pm enable com.iqqijni.bbkeyboard; adb shell ime enable "
               "com.iqqijni.bbkeyboard/.keyboard_service.view.HDKeyboardService; adb shell ime set "
               "com.iqqijni.bbkeyboard/.keyboard_service.view.HDKeyboardService;")
+
+
+def open_magisk():
+    answer = input("Press Enter and tap Allow and Ok to reboot.")
+    os.system("adb shell monkey -p com.topjohnwu.magisk 1")
 
 
 def usage():
@@ -174,6 +191,7 @@ def main():
     flash_lineage()
     install_magisk()
     apply_kika()
+    open_magisk()
 
     return
 
