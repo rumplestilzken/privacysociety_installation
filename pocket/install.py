@@ -142,8 +142,8 @@ def flash_lineage():
         ".tar.xz") + "/vbmeta_vendor.img")
     os.system("fastboot flash --disable-verity --disable-verification vbmeta_system " + here + "/" + filename.strip(
         ".tar.xz") + "/vbmeta_system.img")
-    os.system("fastboot flash lk " + here + "/lk." + filename.strip(".tar.xz") + ".img")
-    os.system("fastboot flash lk2 " + here + "/lk." + filename.strip(".tar.xz") + ".img")
+    os.system("fastboot flash lk " + here + "/lk." + filename.strip(".tar.xz"))
+    os.system("fastboot flash lk2 " + here + "/lk." + filename.strip(".tar.xz"))
     os.system("fastboot flash super " + here + "/super." + filename.strip(".tar.xz") + ".ext4.img")
     os.system("fastboot reboot")
     print("The device will now reboot into PrivacySociety GSI")
