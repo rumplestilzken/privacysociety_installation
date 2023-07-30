@@ -94,7 +94,7 @@ def download_resources():
 
     lk_filename = "lk." + filename.strip(".tar.xz")
 
-    if not os.path.exists(here + "/" + lk_filename):
+    if not os.path.exists(here + "/" + lk_filename + ".img"):
         print("Downloading lk Image")
         os.system("cd " + here + "; wget https://github.com/rumplestilzken/privacysociety_installation/releases/download"
                   "/rom_resources/" + lk_filename + ".img")
