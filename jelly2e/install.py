@@ -93,7 +93,6 @@ def download_resources():
                   "/download/rom_resources/Magisk-v26.1.apk")
 
     lk_filename = "lk." + filename.strip(".tar.xz")
-
     if not os.path.exists(here + "/" + lk_filename + ".img"):
         print("Downloading lk Image")
         os.system("cd " + here + "; wget https://github.com/rumplestilzken/privacysociety_installation/releases/download"
