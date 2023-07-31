@@ -90,7 +90,7 @@ def download_resources():
 
     if not os.path.exists("downloads/Magisk-v26.1.apk"):
         os.system("cd downloads/; wget https://github.com/rumplestilzken/privacysociety_installation/releases"
-                  "/download/rom_resources/Magisk-v25.2.apk")
+                  "/download/rom_resources/Magisk-v26.1.apk")
 
     lk_filename = "lk." + filename.strip(".tar.xz")
 
