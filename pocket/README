@@ -13,5 +13,3 @@ Tap Developer Options.
 Enable USB Debugging.
     Tap Ok to allow USB Debugging on this device.
 Enable OEM Unlocking.
-
-Once the flashing process has completed open Magisk and allow for a reboot.
