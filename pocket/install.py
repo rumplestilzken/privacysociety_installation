@@ -66,7 +66,7 @@ def download_resources():
         os.system("cd " + here + "; wget https://github.com/rumplestilzken/privacysociety_installation/releases/download"
                   "/rom_resources/" + img_filename)
         print("Extracting PrivacySociety GSI")
-        os.system("xz -kd " + img_filename)
+        os.system("cd " + here + "; xz -kd " + img_filename)
 
     global magisk_filename
     magisk_filename = ""
