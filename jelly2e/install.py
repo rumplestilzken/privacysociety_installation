@@ -50,8 +50,9 @@ def download_resources():
 
     if not os.path.exists(here + "/" + filename):
         print("Downloading Stock Rom")
-        os.system("cd " + here + "; wget https://github.com/rumplestilzken/privacysociety_installation/releases/download"
-                  "/rom_resources/" + filename)
+        os.system(
+            "cd " + here + "; wget https://github.com/rumplestilzken/privacysociety_installation/releases/download"
+                           "/rom_resources/" + filename)
 
     if not os.path.exists(here + "/" + filename.strip(".tar.xz")):
         print("Extracting Stock Rom")
@@ -59,12 +60,12 @@ def download_resources():
         os.system("cd " + here + "; tar -xf " + filename.strip(".xz"))
         os.system("cd " + here + "; rm " + filename.strip(".xz"))
 
-
     img_filename = "privacysociety_jelly2e.img.xz"
     if not os.path.exists(here + "/" + img_filename):
         print("Downloading PrivacySociety GSI")
-        os.system("cd " + here + "; wget https://github.com/rumplestilzken/privacysociety_installation/releases/download"
-                  "/rom_resources/" + img_filename)
+        os.system(
+            "cd " + here + "; wget https://github.com/rumplestilzken/privacysociety_installation/releases/download"
+                           "/rom_resources/" + img_filename)
         print("Extracting PrivacySociety GSI")
         os.system("cd " + here + "; xz -kd " + img_filename)
 
@@ -73,12 +74,13 @@ def download_resources():
     if region == DeviceRegion.TEE:
         magisk_filename = "magisk_patched-26100_X9NVK.img"
     else:
-        magisk_filename = "magisk_patched-25200_h3ilq.img" #TODO:
+        magisk_filename = "magisk_patched-25200_h3ilq.img"  # TODO:
 
     if not os.path.exists(here + "/" + magisk_filename):
         print("Downloading Magisk Boot Image")
-        os.system("cd " + here + "; wget https://github.com/rumplestilzken/privacysociety_installation/releases/download"
-                  "/rom_resources/" + magisk_filename)
+        os.system(
+            "cd " + here + "; wget https://github.com/rumplestilzken/privacysociety_installation/releases/download"
+                           "/rom_resources/" + magisk_filename)
 
     global sp_flash_tool_filename
     sp_flash_tool_filename = "SP_Flash_Tool_v5.2152_Linux.zip"
@@ -95,8 +97,10 @@ def download_resources():
     lk_filename = "lk." + filename.strip(".tar.xz")
     if not os.path.exists(here + "/" + lk_filename + ".img"):
         print("Downloading lk Image")
-        os.system("cd " + here + "; wget https://github.com/rumplestilzken/privacysociety_installation/releases/download"
-                  "/rom_resources/" + lk_filename + ".img")
+        os.system(
+            "cd " + here + "; wget https://github.com/rumplestilzken/privacysociety_installation/releases/download"
+                           "/rom_resources/" + lk_filename + ".img")
+
 
 def flash_stock():
     here = os.path.dirname(os.path.realpath(__file__))
@@ -122,7 +126,7 @@ def mksuper():
             os.system("cd " + here + "/../downloads/mksuper/; python extract.py -stock " + here + "/" \
                       + filename.strip(".tar.xz") + " -out " + here + "/super_" + filename.strip(".tar.xz"))
         os.system("cd " + here + "/../downloads/mksuper/; python mksuper.py -dev jelly2e -gsi " + here \
-                  + "/privacysociety_pocket.img" + " -out " + here + "/super." + filename.strip(
+                  + "/privacysociety_jelly2e.img" + " -out " + here + "/super." + filename.strip(
             ".tar.xz") + ".ext4.img -super_path " + here + "/super_" + filename.strip(".tar.xz"))
 
 
