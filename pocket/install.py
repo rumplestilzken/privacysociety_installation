@@ -84,12 +84,12 @@ def download_resources():
     sp_flash_tool_filename = "SP_Flash_Tool_v5.2152_Linux.zip"
     if not os.path.exists(here + "/../downloads/" + sp_flash_tool_filename):
         print("Downloading Magisk Boot Image")
-        os.system("cd downloads/; wget https://github.com/rumplestilzken/privacysociety_installation/releases/download"
+        os.system("cd " + here + "/../downloads/; wget https://github.com/rumplestilzken/privacysociety_installation/releases/download"
                   "/rom_resources/" + sp_flash_tool_filename)
-        os.system("cd downloads; unzip " + sp_flash_tool_filename)
+        os.system("cd " + here + "/../downloads; unzip " + sp_flash_tool_filename)
 
-    if not os.path.exists("downloads/Magisk-v25.2.apk"):
-        os.system("cd downloads/; wget https://github.com/rumplestilzken/privacysociety_installation/releases"
+    if not os.path.exists(here + "/../downloads/Magisk-v25.2.apk"):
+        os.system("cd " + here + "/../downloads/; wget https://github.com/rumplestilzken/privacysociety_installation/releases"
                   "/download/rom_resources/Magisk-v25.2.apk")
 
     lk_filename = "lk." + filename.strip(".tar.xz")

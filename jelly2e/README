@@ -2,6 +2,10 @@ This process will take 35GB of space for one region. Please make sure there is e
 
 Start the installation script with the phone plugged in to the computer.
 
+Take the gel case off the device, as it interferes with pressing the volume up button in time.
+If you miss this step, which is crucial, run "python jelly2e/install.py -region " tee or eea " -flash_only" which will
+pick up where the process left off and allow you another chance at unlocking the bootloader.
+
 Power phone on.
 Go through setup process, skip everything,  there is nothing important here.
 Open Settings.

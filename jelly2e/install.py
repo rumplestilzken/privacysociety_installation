@@ -86,12 +86,12 @@ def download_resources():
     sp_flash_tool_filename = "SP_Flash_Tool_v5.2152_Linux.zip"
     if not os.path.exists(here + "/../downloads/" + sp_flash_tool_filename):
         print("Downloading Magisk Boot Image")
-        os.system("cd downloads/; wget https://github.com/rumplestilzken/privacysociety_installation/releases/download"
+        os.system("cd " + here + "/../downloads/; wget https://github.com/rumplestilzken/privacysociety_installation/releases/download"
                   "/rom_resources/" + sp_flash_tool_filename)
         os.system("cd downloads; unzip " + sp_flash_tool_filename)
 
-    if not os.path.exists("downloads/Magisk-v26.1.apk"):
-        os.system("cd downloads/; wget https://github.com/rumplestilzken/privacysociety_installation/releases"
+    if not os.path.exists(here + "/downloads/Magisk-v26.1.apk"):
+        os.system("cd " + here + "/../downloads/; wget https://github.com/rumplestilzken/privacysociety_installation/releases"
                   "/download/rom_resources/Magisk-v26.1.apk")
 
     lk_filename = "lk." + filename.strip(".tar.xz")
@@ -167,6 +167,7 @@ def usage():
 def parse_arguments():
     parser = ArgumentParser(formatter_class=RawDescriptionHelpFormatter, epilog=usage())
     parser.add_argument("-region", required=True, type=DeviceRegion, action=EnumAction, default=DeviceRegion.NotSet)
+    parser.add_argument("-flash_only", required=False, action="store_false", default=None)
     return parser.parse_args()
 
 
@@ -178,7 +179,10 @@ def main():
 
     download_resources()
     mksuper()
-    flash_stock()
+
+    if args.flash_only is None:
+        flash_stock()
+
     flash_lineage()
     install_magisk()
     open_magisk()
