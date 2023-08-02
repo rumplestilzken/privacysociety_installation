@@ -140,6 +140,7 @@ def flash_lineage():
     answer = input("Press Volume Up on the device when prompted...Press enter to continue")
     os.system("fastboot flashing unlock")
     os.system("fastboot flash boot_a " + here + "/" + magisk_filename)
+    os.system("fastboot flash boot_a " + here + "/" + magisk_filename)
     os.system("fastboot flash lk " + here + "/lk." + filename.strip(".tar.xz") + ".img")
     os.system("fastboot flash super " + here + "/super." + filename.strip(".tar.xz") + ".ext4.img")
     os.system("fastboot reboot")
