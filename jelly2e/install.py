@@ -90,7 +90,7 @@ def download_resources():
                   "/rom_resources/" + sp_flash_tool_filename)
         os.system("cd downloads; unzip " + sp_flash_tool_filename)
 
-    if not os.path.exists(here + "/downloads/Magisk-v26.1.apk"):
+    if not os.path.exists(here + "/../downloads/Magisk-v26.1.apk"):
         os.system("cd " + here + "/../downloads/; wget https://github.com/rumplestilzken/privacysociety_installation/releases"
                   "/download/rom_resources/Magisk-v26.1.apk")
 
