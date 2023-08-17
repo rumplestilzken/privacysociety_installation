@@ -66,7 +66,7 @@ def flash_lineage():
     os.system("fastboot flashing unlock")
     output = subprocess.check_output("fastboot flash boot_a " + here + "/" + magisk_filename)
     while "not allowed in locked state" in output:
-        print("Unlocking attempt failed. Please try again. Press Volume Up when prompted. Press enter when ready.")
+        input("Unlocking attempt failed. Please try again. Press Volume Up when prompted. Press enter when ready.")
         os.system("fastboot flashing unlock")
         output = subprocess.check_output("fastboot flash boot_a " + here + "/" + magisk_filename)
 
@@ -74,6 +74,7 @@ def flash_lineage():
         ".tar.xz") + "/image-barbet-tq3a.230805.001/vbmeta.img")
     os.system("fastboot flash --disable-verity --disable-verification vbmeta_system_a " + here + "/" + filename.strip(
         ".tar.xz") + "/image-barbet-tq3a.230805.001/vbmeta_system.img")
+    os.system("fastboot resize-logical-partition product_a 0x0")
     os.system("fastboot flash system_a " + here + "/" + filename.strip(".tar.xz") + ".img")
     os.system("fastboot reboot")
     print("The device will now reboot into PrivacySociety GSI")

@@ -135,7 +135,7 @@ def flash_lineage():
     os.system("fastboot flashing unlock")
     output = subprocess.check_output("fastboot flash boot " + here + "/" + magisk_filename)
     while "not allowed in locked state" in output:
-        print("Unlocking attempt failed. Please try again. Press Volume Up when prompted. Press enter when ready.")
+        input("Unlocking attempt failed. Please try again. Press Volume Up when prompted. Press enter when ready.")
         os.system("fastboot flashing unlock")
         output = subprocess.check_output("fastboot flash boot " + here + "/" + magisk_filename)
 
