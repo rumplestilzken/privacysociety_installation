@@ -5,6 +5,7 @@ import subprocess
 
 filename = ""
 magisk_filename = ""
+img_filename = ""
 
 
 def download_resources():
@@ -12,20 +13,20 @@ def download_resources():
 
     global filename
 
-    filename = "barbet-tq3a.230805.001.tar.xz"
+    filename = "barbet-tq3a.230805.001"
 
     if not os.path.exists(here + "/" + filename):
         print("Downloading Stock Rom")
         os.system(
-            "cd " + here + "; wget https://github.com/rumplestilzken/privacysociety_installation/releases/download"
-                           "/rom_resources/" + filename)
+            "cd " + here + "; wget https://dl.google.com/dl/android/aosp/barbet-tq3a.230805.001-factory-5c469710.zip")
 
-    if not os.path.exists(here + "/" + filename.strip(".tar.xz")):
+    if not os.path.exists(here + "/" + filename):
         print("Extracting Stock Rom")
-        os.system("cd " + here + "; xz -kd " + filename)
-        os.system("cd " + here + "; tar -xf " + filename.strip(".xz"))
-        os.system("cd " + here + "; rm " + filename.strip(".xz"))
+        os.system("cd " + here + "; unzip " + filename)
+    if not os.path.exists(here + "/" + filename + "/system.img"):
+        os.system("cd " + here + "/" + filename + "/; unzip image-barbet-tq3a.230805.001.zip")
 
+    global img_filename
     img_filename = "privacysociety_pixel5a.img.xz"
     if not os.path.exists(here + "/" + img_filename):
         print("Downloading PrivacySociety GSI")
@@ -49,33 +50,34 @@ def flash_stock():
     here = os.path.dirname(os.path.realpath(__file__))
     print("Flashing Stock Rom")
     global filename
-    answer = input("Keep device connected. Press enter and reboot or power on the device.")
-    command = "cd " + here + "/" + filename.replace(".tar.xz", "") + "/flash-all.sh"
+    answer = input("Plug in the device. Let device power on and manually process according to README. Press Enter to "
+                   "continue.")
+    os.system("adb kill-server")
+    os.system("adb reboot fastboot")
+    print("When flashing stock rom has finished, press and hold Volume Down until it boots into FASTBOOTD mode.")
+    command = "cd " + here + "/" + filename + ";bash flash-all.sh"
+
     os.system(command)
 
 
 def flash_lineage():
+    global filename
+    global img_filename
+
     print("Preparing to flash PrivacySociety GSI")
     here = os.path.dirname(os.path.realpath(__file__))
-
-    answer = input("Let device power on and manually process according to README. Press Enter to continue.")
-    os.system("adb kill-server")
-    os.system("adb shell; exit")
-    os.system("adb reboot fastboot")
     answer = input("Press Volume Up on the device when prompted...Press enter to continue")
+    os.system("fastboot reboot bootloader")
     os.system("fastboot flashing unlock")
-    output = subprocess.check_output("fastboot flash boot_a " + here + "/" + magisk_filename)
-    while "not allowed in locked state" in output:
-        input("Unlocking attempt failed. Please try again. Press Volume Up when prompted. Press enter when ready.")
-        os.system("fastboot flashing unlock")
-        output = subprocess.check_output("fastboot flash boot_a " + here + "/" + magisk_filename)
+    os.system("fastboot flash boot_a " + here + "/" + magisk_filename)
+    os.system("fastboot flash --disable-verity --disable-verification vbmeta_a " + here + "/" + filename + \
+              "/vbmeta.img")
+    os.system("fastboot flash --disable-verity --disable-verification vbmeta_system_a " + here + "/" + filename + \
+              "/vbmeta_system.img")
 
-    os.system("fastboot flash --disable-verity --disable-verification vbmeta_a " + here + "/" + filename.strip(
-        ".tar.xz") + "/image-barbet-tq3a.230805.001/vbmeta.img")
-    os.system("fastboot flash --disable-verity --disable-verification vbmeta_system_a " + here + "/" + filename.strip(
-        ".tar.xz") + "/image-barbet-tq3a.230805.001/vbmeta_system.img")
+    os.system("fastboot reboot fastboot")
     os.system("fastboot resize-logical-partition product_a 0x0")
-    os.system("fastboot flash system_a " + here + "/" + filename.strip(".tar.xz") + ".img")
+    os.system("fastboot flash system_a " + here + "/" + img_filename.replace(".xz", ""))
     os.system("fastboot reboot")
     print("The device will now reboot into PrivacySociety GSI")
 
