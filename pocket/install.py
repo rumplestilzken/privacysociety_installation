@@ -3,6 +3,7 @@
 import os
 from enum import Enum
 from argparse import ArgumentParser, RawDescriptionHelpFormatter, Action
+import subprocess
 
 region = ""
 filename = ""
@@ -133,10 +134,16 @@ def flash_lineage():
 
     answer = input("Let device power on and manually process according to README. Press Enter to continue.")
     os.system("adb kill-server")
+    os.system("adb shell; exit")
     os.system("adb reboot bootloader")
     answer = input("Press Volume Up on the device when prompted...Press enter to continue")
     os.system("fastboot flashing unlock")
-    os.system("fastboot flash boot " + here + "/" + magisk_filename)
+    output = subprocess.check_output("fastboot flash boot " + here + "/" + magisk_filename)
+    while "not allowed in locked state" in output:
+        print("Unlocking attempt failed. Please try again. Press Volume Up when prompted. Press enter when ready.")
+        os.system("fastboot flashing unlock")
+        output = subprocess.check_output("fastboot flash boot " + here + "/" + magisk_filename)
+
     os.system("fastboot flash --disable-verity --disable-verification vbmeta " + here + "/" + filename.strip(
         ".tar.xz") + "/vbmeta.img")
     os.system("fastboot flash --disable-verity --disable-verification vbmeta_vendor " + here + "/" + filename.strip(

@@ -3,6 +3,8 @@
   <component name="VcsDirectoryMappings">
     <mapping directory="" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/downloads/mksuper" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/downloads/mksuper/lpunpack_and_lpmake" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/downloads/mksuper/simg2img" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/downloads/mtkclient" vcs="Git" />
   </component>
 </project>

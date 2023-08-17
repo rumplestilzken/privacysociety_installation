@@ -1,0 +1,15 @@
+This process will take 35GB of space. Please make sure there is enough room on your computer.
+
+Start the installation script with the phone plugged in to the computer.
+
+Power phone on.
+Go through setup process, skip everything,  there is nothing important here.
+Open Settings.
+Open About.
+Tap 7 times on Build number.
+Go back one menu, tap System.
+Tap Advanced.
+Tap Developer Options.
+Enable USB Debugging.
+    Tap Ok to allow USB Debugging on this device.
+Enable OEM Unlocking.
