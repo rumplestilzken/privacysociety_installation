@@ -91,6 +91,7 @@ def flash_lineage():
     os.system("fastboot reboot fastboot")
     os.system("fastboot resize-logical-partition product_a 0x0")
     os.system("fastboot flash system_a " + here + "/" + img_filename.replace(".xz", ""))
+    os.system("fastboot erase userdata")
     os.system("fastboot reboot")
     print("The device will now reboot into PrivacySociety GSI")
 
