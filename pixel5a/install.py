@@ -26,6 +26,19 @@ def download_resources():
     if not os.path.exists(here + "/" + filename + "/system.img"):
         os.system("cd " + here + "/" + filename + "/; unzip image-barbet-tq3a.230805.001.zip")
 
+    f = open(here + "/" + filename + "/flash-all.sh", "r")
+    file_lines = f.read()
+    f.close()
+
+    if "skip-reboot" not in file_lines:
+        file_lines = file_lines.replace("-w", "-w --skip-reboot")
+
+        f = open(here + "/" + filename + "/flash-all.sh", "w")
+        f.write(file_lines)
+        f.close()
+
+        print(file_lines)
+
     global img_filename
     img_filename = "privacysociety_pixel5a.img.xz"
     if not os.path.exists(here + "/" + img_filename):
