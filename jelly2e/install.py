@@ -91,10 +91,6 @@ def download_resources():
                   "/rom_resources/" + sp_flash_tool_filename)
         os.system("cd downloads; unzip " + sp_flash_tool_filename)
 
-    if not os.path.exists(here + "/../downloads/Magisk-v26.1.apk"):
-        os.system("cd " + here + "/../downloads/; wget https://github.com/rumplestilzken/privacysociety_installation/releases"
-                  "/download/rom_resources/Magisk-v26.1.apk")
-
     lk_filename = "lk." + filename.strip(".tar.xz")
     if not os.path.exists(here + "/" + lk_filename + ".img"):
         print("Downloading lk Image")
@@ -153,19 +149,6 @@ def flash_lineage():
     os.system("fastboot flash super " + here + "/super." + filename.strip(".tar.xz") + ".ext4.img")
     os.system("fastboot reboot")
     print("The device will now reboot into PrivacySociety GSI")
-
-
-def install_magisk():
-    answer = input("Once the phone has booted  into PrivacySociety GSI and been set up, press Enter.")
-    here = os.path.dirname(os.path.realpath(__file__))
-
-    print("Installing Magisk")
-    os.system("adb install " + here + "/../downloads/Magisk-v26.1.apk")
-
-
-def open_magisk():
-    answer = input("Press Enter and tap Allow and Ok to reboot.")
-    os.system("adb shell monkey -p com.topjohnwu.magisk 1")
 
 
 def usage():

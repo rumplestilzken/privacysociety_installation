@@ -89,12 +89,7 @@ def download_resources():
                   "/rom_resources/" + sp_flash_tool_filename)
         os.system("cd " + here + "/../downloads; unzip " + sp_flash_tool_filename)
 
-    if not os.path.exists(here + "/../downloads/Magisk-v25.2.apk"):
-        os.system("cd " + here + "/../downloads/; wget https://github.com/rumplestilzken/privacysociety_installation/releases"
-                  "/download/rom_resources/Magisk-v25.2.apk")
-
     lk_filename = "lk." + filename.strip(".tar.xz")
-
     if not os.path.exists(here + "/" + lk_filename + ".img"):
         print("Downloading lk Image")
         os.system("cd " + here + "; wget https://github.com/rumplestilzken/privacysociety_installation/releases/download"
@@ -157,23 +152,10 @@ def flash_lineage():
     print("The device will now reboot into PrivacySociety GSI")
 
 
-def install_magisk():
-    answer = input("Once the phone has booted  into PrivacySociety GSI and been set up, press Enter.")
-    here = os.path.dirname(os.path.realpath(__file__))
-    print("Installing Magisk")
-
-    os.system("adb install " + here + "/../downloads/Magisk-v25.2.apk")
-
-
 def apply_kika():
     os.system("adb shell pm enable com.iqqijni.bbkeyboard; adb shell ime enable "
               "com.iqqijni.bbkeyboard/.keyboard_service.view.HDKeyboardService; adb shell ime set "
               "com.iqqijni.bbkeyboard/.keyboard_service.view.HDKeyboardService;")
-
-
-def open_magisk():
-    answer = input("Press Enter and tap Allow and Ok to reboot.")
-    os.system("adb shell monkey -p com.topjohnwu.magisk 1")
 
 
 def usage():
@@ -197,9 +179,7 @@ def main():
     mksuper()
     flash_stock()
     flash_lineage()
-    install_magisk()
     apply_kika()
-    open_magisk()
 
     return
 

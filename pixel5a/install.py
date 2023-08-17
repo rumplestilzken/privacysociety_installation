@@ -44,11 +44,6 @@ def download_resources():
             "cd " + here + "; wget https://github.com/rumplestilzken/privacysociety_installation/releases/download"
                            "/rom_resources/" + magisk_filename)
 
-    if not os.path.exists(here + "/../downloads/Magisk-v26.1.apk"):
-        os.system(
-            "cd " + here + "/../downloads/; wget https://github.com/rumplestilzken/privacysociety_installation/releases"
-                           "/download/rom_resources/Magisk-v26.1.apk")
-
 
 def flash_stock():
     here = os.path.dirname(os.path.realpath(__file__))
