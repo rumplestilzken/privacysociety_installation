@@ -67,7 +67,6 @@ def flash_stock():
                    "continue.")
     os.system("adb kill-server")
     os.system("adb reboot fastboot")
-    print("When flashing stock rom has finished, press and hold Volume Down until it boots into FASTBOOTD mode.")
     command = "cd " + here + "/" + filename + ";bash flash-all.sh"
 
     os.system(command)
@@ -79,7 +78,8 @@ def flash_lineage():
 
     print("Preparing to flash PrivacySociety GSI")
     here = os.path.dirname(os.path.realpath(__file__))
-    answer = input("Press Volume Up on the device when prompted...Press enter to continue")
+    answer = input("Press Volume Down on the device when prompted and Press the Power button to Unlock the "
+                   "bootloader...Press enter to continue")
     os.system("fastboot reboot bootloader")
     os.system("fastboot flashing unlock")
     os.system("fastboot flash boot_a " + here + "/" + magisk_filename)
