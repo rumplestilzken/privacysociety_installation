@@ -133,7 +133,6 @@ def flash_lineage():
 
     answer = input("Let device power on and manually process according to README. Press Enter to continue.")
     os.system("adb kill-server")
-    os.system("adb shell; exit")
     os.system("adb reboot bootloader")
     answer = input("Press Volume Up on the device when prompted...Press enter to continue")
     os.system("fastboot flashing unlock")
