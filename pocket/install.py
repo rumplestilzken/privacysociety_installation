@@ -131,12 +131,14 @@ def flash_lineage():
     os.system("adb kill-server")
     os.system("adb reboot bootloader")
     answer = input("Press Volume Up on the device when prompted...Press enter to continue")
-    os.system("fastboot flashing unlock")
-    output = subprocess.check_output("fastboot flash boot " + here + "/" + magisk_filename)
-    while "not allowed in locked state" in output:
-        input("Unlocking attempt failed. Please try again. Press Volume Up when prompted. Press enter when ready.")
+
+    answer = "n"
+    while not answer == "y":
         os.system("fastboot flashing unlock")
-        output = subprocess.check_output("fastboot flash boot " + here + "/" + magisk_filename)
+        answer = input(
+            "Press y and Enter when the device is unlocked. To rerun the unlocking process press enter. (y/n):")
+
+    os.system("fastboot flash boot " + here + "/" + magisk_filename)
 
     os.system("fastboot flash --disable-verity --disable-verification vbmeta " + here + "/" + filename.strip(
         ".tar.xz") + "/vbmeta.img")
@@ -176,7 +178,7 @@ def main():
 
     download_resources()
     mksuper()
-    flash_stock()
+    # flash_stock()
     flash_lineage()
     apply_kika()
 

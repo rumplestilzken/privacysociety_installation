@@ -135,13 +135,13 @@ def flash_lineage():
     os.system("adb kill-server")
     os.system("adb reboot bootloader")
     answer = input("Press Volume Up on the device when prompted...Press enter to continue")
-    os.system("fastboot flashing unlock")
+
+    answer = "n"
+    while not answer == "y":
+        os.system("fastboot flashing unlock")
+        answer = input("Press y and Enter when the device is unlocked. To rerun the unlocking process press enter. (y/n):")
 
     output = subprocess.check_output("fastboot flash boot_a " + here + "/" + magisk_filename)
-    while "not allowed in locked state" in output:
-        answer = input("Unlocking attempt failed. Please try again. Press Volume Up when prompted. Press enter when ready.")
-        os.system("fastboot flashing unlock")
-        output = subprocess.check_output("fastboot flash boot_a " + here + "/" + magisk_filename)
 
     os.system("fastboot flash boot_a " + here + "/" + magisk_filename)
     os.system("fastboot flash lk " + here + "/lk." + filename.strip(".tar.xz") + ".img")
