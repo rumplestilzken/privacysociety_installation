@@ -15,14 +15,14 @@ def download_resources():
 
     filename = "barbet-tq3a.230805.001"
 
-    if not os.path.exists(here + "/" + filename):
+    if not os.path.exists(here + "/barbet-tq3a.230805.001-factory-5c469710.zip"):
         print("Downloading Stock Rom")
         os.system(
             "cd " + here + "; wget https://dl.google.com/dl/android/aosp/barbet-tq3a.230805.001-factory-5c469710.zip")
 
     if not os.path.exists(here + "/" + filename):
         print("Extracting Stock Rom")
-        os.system("cd " + here + "; unzip " + filename)
+        os.system("cd " + here + "; unzip barbet-tq3a.230805.001-factory-5c469710.zip")
     if not os.path.exists(here + "/" + filename + "/system.img"):
         os.system("cd " + here + "/" + filename + "/; unzip image-barbet-tq3a.230805.001.zip")
 
