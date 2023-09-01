@@ -139,7 +139,6 @@ def flash_lineage():
             "Press y and Enter when the device is unlocked. To rerun the unlocking process press enter. (y/n):")
 
     os.system("fastboot flash boot " + here + "/" + magisk_filename)
-
     os.system("fastboot flash --disable-verity --disable-verification vbmeta " + here + "/" + filename.strip(
         ".tar.xz") + "/vbmeta.img")
     os.system("fastboot flash --disable-verity --disable-verification vbmeta_vendor " + here + "/" + filename.strip(

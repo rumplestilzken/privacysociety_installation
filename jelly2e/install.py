@@ -141,8 +141,7 @@ def flash_lineage():
         os.system("fastboot flashing unlock")
         answer = input("Press y and Enter when the device is unlocked. To rerun the unlocking process press enter. (y/n):")
 
-    output = subprocess.check_output("fastboot flash boot_a " + here + "/" + magisk_filename)
-
+    os.system("fastboot flash boot_a " + here + "/" + magisk_filename)
     os.system("fastboot flash boot_a " + here + "/" + magisk_filename)
     os.system("fastboot flash lk " + here + "/lk." + filename.strip(".tar.xz") + ".img")
     os.system("fastboot flash super " + here + "/super." + filename.strip(".tar.xz") + ".ext4.img")
