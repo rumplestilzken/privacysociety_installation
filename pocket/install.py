@@ -177,7 +177,7 @@ def main():
 
     download_resources()
     mksuper()
-    # flash_stock()
+    flash_stock()
     flash_lineage()
     apply_kika()
 

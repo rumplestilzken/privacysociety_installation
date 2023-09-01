@@ -174,8 +174,6 @@ def main():
         flash_stock()
 
     flash_lineage()
-    install_magisk()
-    open_magisk()
 
     return
 
